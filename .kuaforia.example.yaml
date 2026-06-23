@@ -1,0 +1,5 @@
+server: https://acme-corp.kuaforia.com
+tenant: acme-corp
+api_key: kf_abc123...
+output: table
+default_workspace: 1

@@ -1,8 +1,11 @@
 package cmd
 
 import (
+	"strings"
+
 	"github.com/kuaforia/cli/internal/client"
 	"github.com/kuaforia/cli/internal/format"
+	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 )
 
@@ -20,4 +23,16 @@ func getWorkspace() int {
 
 func getFormatter() format.Formatter {
 	return format.New(format.FormatType(viper.GetString("output")))
+}
+
+func splitFlag(cmd *cobra.Command, name string) []string {
+	v := cmd.Flag(name).Value.String()
+	if v == "" {
+		return nil
+	}
+	parts := strings.Split(v, ",")
+	for i := range parts {
+		parts[i] = strings.TrimSpace(parts[i])
+	}
+	return parts
 }

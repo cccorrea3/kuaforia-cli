@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	"strconv"
 	"strings"
 
 	"github.com/kuaforia/cli/internal/client"
@@ -23,6 +24,11 @@ func getWorkspace() int {
 
 func getFormatter() format.Formatter {
 	return format.New(format.FormatType(viper.GetString("output")))
+}
+
+func parseIntArg(s string) int {
+	n, _ := strconv.Atoi(s)
+	return n
 }
 
 func splitFlag(cmd *cobra.Command, name string) []string {

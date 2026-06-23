@@ -31,6 +31,30 @@ func New(server, apiKey, tenant string) *Client {
 	}
 }
 
+func (c *Client) Get(path string) (json.RawMessage, error) {
+	req, _ := http.NewRequest("GET", c.server+"/api/v1/cli/"+path, nil)
+	req.Header.Set("Authorization", "Bearer "+c.apiKey)
+	req.Header.Set("X-Tenant", c.tenant)
+
+	resp, err := c.http.Do(req)
+	if err != nil {
+		return nil, fmt.Errorf("connection error: %w", err)
+	}
+	defer resp.Body.Close()
+
+	respBody, _ := io.ReadAll(resp.Body)
+
+	if resp.StatusCode >= 400 {
+		var apiErr Response
+		json.Unmarshal(respBody, &apiErr)
+		return nil, fmt.Errorf("API error (%d): %s", resp.StatusCode, apiErr.Error)
+	}
+
+	var apiResp Response
+	json.Unmarshal(respBody, &apiResp)
+	return apiResp.Data, nil
+}
+
 func (c *Client) Call(tool string, args map[string]any) (json.RawMessage, error) {
 	body, _ := json.Marshal(args)
 	req, _ := http.NewRequest("POST", c.server+"/api/v1/cli/"+tool, bytes.NewReader(body))

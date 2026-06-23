@@ -27,7 +27,7 @@ func init() {
 	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default ~/.kuaforia.yaml)")
 	rootCmd.PersistentFlags().StringP("tenant", "t", "", "Tenant slug")
 	rootCmd.PersistentFlags().StringP("api-key", "k", "", "API key")
-	rootCmd.PersistentFlags().StringP("server", "s", "https://api.kuaforia.com", "Server URL")
+	rootCmd.PersistentFlags().StringP("server", "s", "http://localhost:8000", "Server URL")
 	rootCmd.PersistentFlags().StringP("output", "o", "table", "Output format: table, json, yaml")
 
 	viper.BindPFlag("tenant", rootCmd.PersistentFlags().Lookup("tenant"))

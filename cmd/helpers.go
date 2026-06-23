@@ -31,6 +31,11 @@ func parseIntArg(s string) int {
 	return n
 }
 
+func parseFloatFlag(cmd *cobra.Command, name string) float64 {
+	v, _ := strconv.ParseFloat(cmd.Flag(name).Value.String(), 64)
+	return v
+}
+
 func splitFlag(cmd *cobra.Command, name string) []string {
 	v := cmd.Flag(name).Value.String()
 	if v == "" {

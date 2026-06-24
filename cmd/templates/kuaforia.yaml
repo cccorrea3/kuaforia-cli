@@ -1,0 +1,5 @@
+server: http://localhost:8000
+tenant: my-tenant
+api_key: kfr_...
+output: table
+default_workspace: 1

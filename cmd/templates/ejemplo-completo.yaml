@@ -1,0 +1,35 @@
+title: Ejemplo Completo
+description: |
+  Caso de ejemplo con todos los campos del schema.
+priority: high
+status: draft
+type: funcional
+category: autenticación
+system_module: Usuarios
+system_version: "2.0"
+trigger_context: |
+  El usuario intenta iniciar sesión con credenciales inválidas más de 5 veces.
+expected_behavior: |
+  La cuenta se bloquea temporalmente por 15 minutos y se notifica al admin.
+tags:
+  - seguridad
+  - autenticación
+  - rate-limit
+steps:
+  - order: 1
+    description: Ingresar credenciales inválidas
+    action: POST /api/login con password incorrecto
+    expected: HTTP 401
+  - order: 2
+    description: Superar límite de intentos
+    action: Repetir paso 1 cinco veces
+    expected: HTTP 429 + mensaje "Cuenta bloqueada temporalmente"
+dependencies:
+  - case: "Configuración de límites de seguridad"
+    type: depends_on
+tests:
+  - type: behavior
+    definition:
+      question: "¿Se bloquea la cuenta después de 5 intentos fallidos?"
+      expectedTerms: ["bloqueada", "15 minutos", "notificación"]
+      minConfidence: 0.8
